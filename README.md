@@ -8,8 +8,8 @@
 ### Tools and Files
 #### Tools:
 1. [MCP-Reborn (Minecraft Coder Pack - Reborn)](https://github.com/Hexeption/MCP-Reborn)
-2. ForgeAutoRenamingTool-1.0.2-all.jar
-3. ForgeFlower-2.0.629.0.jar
+2. [ForgeAutoRenamingTool](https://files.minecraftforge.net/net/minecraftforge/ForgeAutoRenamingTool/index.html) (You need to download the 'all' one with dependencies it's needed.)
+3. [Vineflower](https://github.com/Vineflower/vineflower)
 4. [Tools](https://github.com/0deans/Tools)
 #### Files:
 1. [OptiFine](https://www.optifine.net/downloads)
@@ -35,7 +35,7 @@ java -cp "optifine.jar" optifine.Patcher client.jar optifine.jar patched.jar
 2. Save the "assets" folder from "patched.jar". You will need this folder later in MCP-Reborn.
 
 ```bash
-java -jar ForgeAutoRenamingTool-1.0.2-all.jar --input merge.jar --output rename.jar --map mergeMappings.jar --cfg libraries.txt --ann-fix --ids-fix --src-fix --record-fix
+java -jar ForgeAutoRenamingTool --input merge.jar --output rename.jar --map mergeMappings.jar --cfg libraries.txt --ann-fix --ids-fix --src-fix --record-fix
 ```
 
 #### Step 3: Decompiling
@@ -43,7 +43,7 @@ java -jar ForgeAutoRenamingTool-1.0.2-all.jar --input merge.jar --output rename.
 Decompile the "rename.jar" file. The result will be the "decompiled.jar" file.
 
 ```bash
-java -jar forgeflower-2.0.629.0.jar -din=1 -rbr=1 -dgs=1 -asc=1 -rsy=1 -iec=1 -jvn=1 -isl=0 -iib=1 -bsm=1 -dcl=1 -log=TRACE -cfg libraries.txt rename.jar decompiled.jar
+java -jar vineflower --decompile-inner --remove-bridge --decompile-generics --ascii-strings --remove-synthetic --include-classpath --variable-renaming=jad --ignore-invalid-bytecode --bytecode-source-mapping --dump-code-lines "--indent-string=    " --log-CE -cfg libraries.txt rename.jar decompiled.jar
 ```
 
 #### Step 4: Patching Again
@@ -81,22 +81,4 @@ If you have previously generated patches between 'patched_joined' and a source w
 
 ```bash
 java -cp Tools.jar ApplyPatches src patched_output patches rejects
-```
-
-## OptiFine 1.20.6_HD_U_I9_pre1
-
-```bash
-java -jar ForgeAutoRenamingTool-1.0.8-all.jar "--input" "bin\merge.jar" "--output" "renameoutput.jar" "--map" "bin\mergeMappings.jar" "--cfg" "bin\libraries.txt" "--ann-fix" "--ids-fix" "--src-fix" "--record-fix"
-```
-
-```bash
-java -jar vineflower-1.10.1.jar --decompile-inner --remove-bridge --decompile-generics --ascii-strings --remove-synthetic --include-classpath --variable-renaming=jad --ignore-invalid-bytecode --bytecode-source-mapping --dump-code-lines "--indent-string=    " --log-CE -cfg bin\libraries.txt renameoutput.jar decompiled.jar
-```
-
-```bash
-java -cp Tools.jar ApplyPatches decompiled.jar patched_joined bin/joined rejects_joined
-```
-
-```bash
-java -cp Tools.jar Srg2Mcp bin/mappings.zip patched_joined
 ```
